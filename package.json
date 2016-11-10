@@ -1,0 +1,35 @@
+{
+  "name": "eine",
+  "version": "1.0.0",
+  "description": "A chat example to showcase how to use `socket.io` with a static `express` server with `async` for control flow.",
+  "main": "app.js",
+  "author": "Avinash Reddy <beavinash15@gmail.com>",
+  "dependencies": {
+    "async": "~0.2.8",
+    "body-parser": "^1.15.2",
+    "connect-flash": "^0.1.1",
+    "ejs": "^2.5.2",
+    "express": "^3.2.6",
+    "express-session": "^1.14.2",
+    "method-override": "^2.3.6",
+    "mongoose": "^4.6.6",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
+    "passport-local-mongoose": "^4.0.0",
+    "socket.io": "~0.9.14"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+
+  },
+  "devDependencies": {},
+  "keywords": [
+    "Social",
+    "Networking",
+    "Friends",
+    "Productivity",
+    "Process"
+  ],
+  "license": "ISC"
+}
