@@ -1,10 +1,10 @@
-#YelpCamp
+#Eine
 
 ##Initial Setup
 * Add Landing Page
-* Add Campgrounds Page that lists all campgrounds
+* Add themes Page that lists all themes
 
-Each Campground has:
+Each theme has:
    * Name
    * Image
 
@@ -12,28 +12,28 @@ Each Campground has:
 * Create our header and footer partials
 * Add in Bootstrap
 
-##Creating New Campgrounds
-* Setup new campground POST route
+##Creating New themes
+* Setup new theme POST route
 * Add in body-parser
 * Setup route to show form
 * Add basic unstyled form
 
-##Style the campgrounds page
+##Style the themes page
 * Add a better header/title
-* Make campgrounds display in a grid
+* Make themes display in a grid
 
 ##Style the Navbar and Form
 * Add a navbar to all templates
-* Style the new campground form
+* Style the new theme form
 
 ##Add Mongoose
 * Install and configure Mongoose
-* Setup campground model
-* Use campground model inside of our routes
+* Setup theme model
+* Use theme model inside of our routes
 
 ##Show Page
 * Review the RESTful routes we've seen so far
-* Add description to our campground model
+* Add description to our theme model
 * Show db.collection.drop()
 * Add a show route/template
 
@@ -48,7 +48,7 @@ Each Campground has:
 
 ##Add the Comment model!
 * Make our errors go away!
-* Display comments on campground show page
+* Display comments on theme show page
 
 ##Comment New/Create
 * Discuss nested routes
@@ -91,23 +91,23 @@ Each Campground has:
 * Associate users and comments
 * Save author's name to a comment automatically
 
-##Users + Campgrounds
-* Prevent an unauthenticated user from creating a campground
-* Save username+id to newly created campground
+##Users + themes
+* Prevent an unauthenticated user from creating a theme
+* Save username+id to newly created theme
 
-# Editing Campgrounds
+# Editing themes
 * Add Method-Override
-* Add Edit Route for Campgrounds
+* Add Edit Route for themes
 * Add Link to Edit Page
 * Add Update Route
 
-#Deleting Campgrounds
+#Deleting themes
 * Add Destroy Route
 * Add Delete button
 
-#Authorization Part 1: Campgrounds
-* User can only edit his/her campgrounds
-* User can only delete his/her campgrounds
+#Authorization Part 1: themes
+* User can only edit his/her themes
+* User can only delete his/her themes
 * Hide/Show edit and delete buttons
 
 #Editing Comments
@@ -115,8 +115,8 @@ Each Campground has:
 * Add Edit button
 * Add Update route
 
-<!--/campgrounds/:id/edit-->
-<!--/campgrounds/:id/comments/:comment_id/edit-->
+<!--/themes/:id/edit-->
+<!--/themes/:id/comments/:comment_id/edit-->
 
 #Deleting Comments
 * Add Destroy route
@@ -143,10 +143,10 @@ NEW     /dogs/new  GET   Displays form to make a new dog
 CREATE  /dogs      POST  Add new dog to DB
 SHOW    /dogs/:id  GET   Shows info about one dog
 
-INDEX   /campgrounds
-NEW     /campgrounds/new
-CREATE  /campgrounds
-SHOW    /campgrounds/:id
+INDEX   /themes
+NEW     /themes/new
+CREATE  /themes
+SHOW    /themes/:id
 
-NEW     campgrounds/:id/comments/new    GET
-CREATE  campgrounds/:id/comments      POST
+NEW     themes/:id/comments/new    GET
+CREATE  themes/:id/comments      POST
