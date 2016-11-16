@@ -1,21 +1,13 @@
 var express     = require("express"),
     app         = express(),
     bodyParser  = require("body-parser"),
-    mongoose = require("mongoose")
+    mongoose = require("mongoose"),
+    Theme = require("./models/theme")
+    
 
 mongoose.connect("mongodb://localhost/eine_practice");
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
-
-// SCHEMA SETUP
-var themeSchema = new mongoose.Schema({
-   name: String,
-   image: String,
-   description: String,
-   timeFrame: String,
-});
-
-var Theme = mongoose.model("Theme", themeSchema);
 
 // Theme.create(
 //      {
