@@ -11,15 +11,17 @@
      </header>
      
      <div class="row text-center" style="display:flex; flex-wrap: wrap;">
-        <% themes.forEach(function(theme){ %>
+        <% allThemes.forEach(function(theme){ %>
             <div class="col-md-3 col-sm-6">
                 <div class="thumbnail">
                    <img src="<%= theme.image %>">
                    <div class="caption">
                        <h4><%= theme.name %></h4>
                    </div>
+                   <p>
+                       <a href="/themes/<%= theme._id %>" class="btn btn-primary">More Info</a>
+                   </p>
                    
-                   // theme timeFrame
                     <div class="caption">
                        <h4><%= theme.timeFrame %></h4>
                    </div>

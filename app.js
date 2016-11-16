@@ -1,43 +1,95 @@
 var express     = require("express"),
     app         = express(),
-    bodyParser  = require("body-parser");
+    bodyParser  = require("body-parser"),
+    mongoose = require("mongoose")
 
+mongoose.connect("mongodb://localhost/eine_practice");
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 
-var themes = [
-        {name: "Salmon Creek", image: "https://farm9.staticflickr.com/8442/7962474612_bf2baf67c0.jpg", timeFrame: "2:00am to 4:00am"},
-        {name: "Granite Hill", image: "https://farm1.staticflickr.com/60/215827008_6489cd30c3.jpg", timeFrame: "2:00am to 4:00am"},
-        {name: "Mountain Goat's Rest", image: "https://farm7.staticflickr.com/6057/6234565071_4d20668bbd.jpg", timeFrame: "2:00am to 4:00am"},
-        {name: "Salmon Creek", image: "https://farm9.staticflickr.com/8442/7962474612_bf2baf67c0.jpg" timeFrame: "2:00am to 4:00am"},
-        {name: "Granite Hill", image: "https://farm1.staticflickr.com/60/215827008_6489cd30c3.jpg" timeFrame: "2:00am to 4:00am"},
-        {name: "Mountain Goat's Rest", image: "https://farm7.staticflickr.com/6057/6234565071_4d20668bbd.jpg" timeFrame: "2:00am to 4:00am"},
-        {name: "Salmon Creek", image: "https://farm9.staticflickr.com/8442/7962474612_bf2baf67c0.jpg" timeFrame: "2:00am to 4:00am"},
-        {name: "Granite Hill", image: "https://farm1.staticflickr.com/60/215827008_6489cd30c3.jpg" timeFrame: "2:00am to 4:00am"},
-        {name: "Mountain Goat's Rest", image: "https://farm7.staticflickr.com/6057/6234565071_4d20668bbd.jpg" timeFrame: "2:00am to 4:00am"}
-];
+// SCHEMA SETUP
+var themeSchema = new mongoose.Schema({
+   name: String,
+   image: String,
+   description: String,
+   timeFrame: String,
+});
+
+var Theme = mongoose.model("Theme", themeSchema);
+
+// Theme.create(
+//      {
+//          name: "Salmon Creek", 
+//          image: "https://farm9.staticflickr.com/8442/7962474612_bf2baf67c0.jpg",
+//          description: "This 
+// is a huge granite hill, no bathrooms.  No water. Beautiful granite!",
+//          timeFrame: "2:00am to 4:00am"
+         
+//      },
+//      function(err, theme){
+//       if(err){
+//           console.log(err);
+//       } else {
+//           console.log("NEWLY CREATED Theme: ");
+//           console.log(theme);
+//       }
+//     });
+
     
 app.get("/", function(req, res){
     res.render("landing");
 });
 
+//INDEX - show all themes
 app.get("/themes", function(req, res){
-    res.render("themes",{themes:themes});
+    // Get all themes
+    Theme.find({}, function(err, allThemes){
+       if(err){
+           console.log(err);
+       } else {
+          res.render("index",{allThemes:allThemes});
+       }
+    });
+    //res.render("themes",{themes:themes});
 });
 
+//CREATE - add new theme to DB
 app.post("/themes", function(req, res){
     // get data from form and add to themes array
     var name = req.body.name;
     var image = req.body.image;
-    var newTheme = {name: name, image: image}
-    themes.push(newTheme);
-    //redirect back to themes page
-    res.redirect("/themes");
+    var timeFrame = req.body.timeFrame;
+    var desc = req.body.description;
+    var newTheme = {name: name, image: image, description: desc, timeFrame: timeFrame}
+    
+    // Create a new theme and save to DB
+    Theme.create(newTheme, function(err, newlyCreated){
+        if(err){
+            console.log(err);
+        } else {
+            //redirect back to themes page
+            res.redirect("/themes");
+        }
+    });
 });
 
+//NEW - show form to create new theme
 app.get("/themes/new", function(req, res){
    res.render("new.ejs"); 
 });
+
+// SHOW - shows more info about one theme
+app.get("/themes/:id", function(req, res){
+    //find the theme with provided ID
+    Theme.findById(req.params.id, function(err, foundTheme){
+        if(err){
+            console.log(err);
+        } else {
+            //render show template with that theme
+            res.render("show", {theme: foundTheme});
+        }
+    });
+})
 
 app.listen(process.env.PORT, process.env.IP, function(){
    console.log("The Eine Server Has Started!");
