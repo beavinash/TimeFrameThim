@@ -1,32 +1,15 @@
 var express     = require("express"),
     app         = express(),
     bodyParser  = require("body-parser"),
-    mongoose = require("mongoose"),
-    Theme = require("./models/theme")
+    mongoose    = require("mongoose"),
+    Theme       = require("./models/theme"),
+    seedDB      = require("./seeds")
     
 
 mongoose.connect("mongodb://localhost/eine_practice");
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
-
-// Theme.create(
-//      {
-//          name: "Salmon Creek", 
-//          image: "https://farm9.staticflickr.com/8442/7962474612_bf2baf67c0.jpg",
-//          description: "This 
-// is a huge granite hill, no bathrooms.  No water. Beautiful granite!",
-//          timeFrame: "2:00am to 4:00am"
-         
-//      },
-//      function(err, theme){
-//       if(err){
-//           console.log(err);
-//       } else {
-//           console.log("NEWLY CREATED Theme: ");
-//           console.log(theme);
-//       }
-//     });
-
+seedDB();
     
 app.get("/", function(req, res){
     res.render("landing");
@@ -73,10 +56,11 @@ app.get("/themes/new", function(req, res){
 // SHOW - shows more info about one theme
 app.get("/themes/:id", function(req, res){
     //find the theme with provided ID
-    Theme.findById(req.params.id, function(err, foundTheme){
+    Theme.findById(req.params.id).populate("comments").exec(function(err, foundTheme){
         if(err){
             console.log(err);
         } else {
+            console.log(foundTheme)
             //render show template with that theme
             res.render("show", {theme: foundTheme});
         }
