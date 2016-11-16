@@ -22,7 +22,7 @@ app.get("/themes", function(req, res){
        if(err){
            console.log(err);
        } else {
-          res.render("index",{allThemes:allThemes});
+          res.render("themes/index",{allThemes:allThemes});
        }
     });
     //res.render("themes",{themes:themes});
@@ -50,7 +50,7 @@ app.post("/themes", function(req, res){
 
 //NEW - show form to create new theme
 app.get("/themes/new", function(req, res){
-   res.render("new.ejs"); 
+   res.render("themes/new"); 
 });
 
 // SHOW - shows more info about one theme
@@ -62,10 +62,48 @@ app.get("/themes/:id", function(req, res){
         } else {
             console.log(foundTheme)
             //render show template with that theme
-            res.render("show", {theme: foundTheme});
+            res.render("themes/show", {theme: foundTheme});
         }
     });
 })
+
+// ====================
+// COMMENTS ROUTES
+// ====================
+
+app.get("/themes/:id/comments/new", function(req, res){
+    // find campground by id
+    Theme.findById(req.params.id, function(err, theme){
+        if(err){
+            console.log(err);
+        } else {
+             res.render("comments/new", {theme: theme});
+        }
+    })
+});
+
+app.post("/themes/:id/comments", function(req, res){
+   //lookup campground using ID
+   Theme.findById(req.params.id, function(err, theme){
+       if(err){
+           console.log(err);
+           res.redirect("/themes");
+       } else {
+        Theme.create(req.body.comment, function(err, comment){
+           if(err){
+               console.log(err);
+           } else {
+               theme.comments.push(comment);
+               theme.save();
+               res.redirect('/themes/' + theme._id);
+           }
+        });
+       }
+   });
+   //create new comment
+   //connect new comment to theme
+   //redirect theme show page
+});
 
 app.listen(process.env.PORT, process.env.IP, function(){
    console.log("The Eine Server Has Started!");
