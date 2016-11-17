@@ -1,19 +1,41 @@
-var express     = require("express"),
-    app         = express(),
-    bodyParser  = require("body-parser"),
-    mongoose    = require("mongoose"),
-    Theme       = require("./models/theme"),
-    Comment     = require("./models/comment"),
-    seedDB      = require("./seeds")
+var express         = require("express"),
+    app             = express(),
+    bodyParser      = require("body-parser"),
+    mongoose        = require("mongoose"),
+    passport        = require("passport"),
+    LocalStrategy   = require("passport-local"),
+    Theme           = require("./models/theme"),
+    Comment         = require("./models/comment"),
+    User            = require("./models/user"),
+    seedDB          = require("./seeds")
     
 
 mongoose.connect("mongodb://localhost/eine_practice");
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"))
-console.log(__dirname)
+//console.log(__dirname)
 seedDB();
-    
+
+// Passport Config
+app.use(require("express-session")({
+    secret: "Work super-hard for atleast 100hours and be best student!",
+    resave: false,
+    saveUninitialized: false
+}))
+
+app.use(passport.initialize())
+app.use(passport.session())
+passport.use(new LocalStrategy(User.authenticate()))
+passport.serializeUser(User.serializeUser())
+passport.deserializeUser(User.deserializeUser())
+
+// the below function is used for sending user data to all templates
+app.use(function(req, res, next){
+   res.locals.currentUser = req.user;
+   next();
+});
+
 app.get("/", function(req, res){
     res.render("landing");
 });
@@ -74,7 +96,7 @@ app.get("/themes/:id", function(req, res){
 // COMMENTS ROUTES
 // ====================
 
-app.get("/themes/:id/comments/new", function(req, res){
+app.get("/themes/:id/comments/new", isLoggedIn,function(req, res){
     // find campground by id
     Theme.findById(req.params.id, function(err, theme){
         if(err){
@@ -85,7 +107,7 @@ app.get("/themes/:id/comments/new", function(req, res){
     })
 });
 
-app.post("/themes/:id/comments", function(req, res){
+app.post("/themes/:id/comments", isLoggedIn,function(req, res){
    //lookup theme using ID
    Theme.findById(req.params.id, function(err, theme){
        if(err){
@@ -107,6 +129,57 @@ app.post("/themes/:id/comments", function(req, res){
    //connect new comment to theme
    //redirect theme show page
 });
+
+// ====================
+// AUTH ROUTES
+// ====================
+
+// Show registration form
+app.get("/register", function(req, res) {
+    res.render("register")
+})
+
+// Sign Up Logic
+app.post("/register", function(req, res) {
+    var newUser = new User({username: req.body.username})
+    User.register(newUser, req.body.password, function(err, user){
+        if(err) {
+            console.log(err)
+            return res.render("register")
+        } else {
+            passport.authenticate("local")(req, res, function(){
+                res.redirect("/themes")
+            })
+        }
+    })
+})
+
+// Show Login Form
+app.get("/login", function(req, res) {
+    res.render("login")
+})
+
+// Login Authentication
+app.post("/login", passport.authenticate("local", 
+    {
+        successRedirect: "/themes",
+        failureRedirect: "/login"
+    }), function(req, res){
+});
+
+// Logout Route
+app.get("/logout", function(req, res) {
+    req.logout()
+    res.redirect("/themes")
+})
+
+// Checking condition if user logged in
+function isLoggedIn(req, res, next){
+    if(req.isAuthenticated()){
+        return next();
+    }
+    res.redirect("/login");
+}
 
 app.listen(process.env.PORT, process.env.IP, function(){
    console.log("The Eine Server Has Started!");
