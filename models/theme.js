@@ -6,12 +6,12 @@ var themeSchema = new mongoose.Schema({
        image: String,
        description: String,
        timeFrame: String,
-        comments: [
-          {
-             type: mongoose.Schema.Types.ObjectId,
-             ref: "Comment"
-          }
-       ]
+       comments: [
+           {
+               type: mongoose.Schema.Types.ObjectId,
+               ref: "Comment"
+           }
+        ]
 });
 
 module.exports = mongoose.model("Theme", themeSchema);

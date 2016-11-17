@@ -3,14 +3,15 @@
 
 <img src="<%= theme.image %>">
 
-<h1><%= theme.timeFrame %></h1>
-
 <p><%= theme.description %></p>
+
+<p>
+    <a class="btn btn-success" href="/themes/<%= theme._id %>/comments/new">Add New Comment</a>
+</p>
 
 <% theme.comments.forEach(function(comment){ %>
     <p>
         <strong><%= comment.author %></strong> - <%= comment.text %>
     </p>
 <% }) %>
-
 <% include ../partials/footer %>

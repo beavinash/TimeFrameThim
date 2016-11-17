@@ -3,6 +3,7 @@ var express     = require("express"),
     bodyParser  = require("body-parser"),
     mongoose    = require("mongoose"),
     Theme       = require("./models/theme"),
+    Comment     = require("./models/comment"),
     seedDB      = require("./seeds")
     
 
@@ -83,13 +84,13 @@ app.get("/themes/:id/comments/new", function(req, res){
 });
 
 app.post("/themes/:id/comments", function(req, res){
-   //lookup campground using ID
+   //lookup theme using ID
    Theme.findById(req.params.id, function(err, theme){
        if(err){
            console.log(err);
            res.redirect("/themes");
        } else {
-        Theme.create(req.body.comment, function(err, comment){
+        Comment.create(req.body.comment, function(err, comment){
            if(err){
                console.log(err);
            } else {
