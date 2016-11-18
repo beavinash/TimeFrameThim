@@ -69,7 +69,7 @@ router.get("/:id/edit", checkThemeOwnership,function(req, res) {
 })
 
 // UPDATE THEMES ROUTE
-router.put("/:id", function(req, res) {
+router.put("/:id", checkThemeOwnership,function(req, res) {
     // Find and Update the correct theme
     Theme.findByIdAndUpdate(req.params.id, req.body.theme, function(err, updatedTheme) {
         if (err) {
@@ -81,7 +81,7 @@ router.put("/:id", function(req, res) {
 })
 
 // Delete and Destroy Theme
-router.delete("/:id", function(req, res) {
+router.delete("/:id", checkThemeOwnership,function(req, res) {
     Theme.findByIdAndRemove(req.params.id, function(err) {
         if (err) {
             res.redirect("/themes")
