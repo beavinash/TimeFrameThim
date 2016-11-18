@@ -1,6 +1,7 @@
 var express = require("express");
 var router  = express.Router();
 var Theme = require("../models/theme")
+var middleware = require("../middleware")
 
 //INDEX - show all themes
 router.get("/", function(req, res){
@@ -16,7 +17,7 @@ router.get("/", function(req, res){
 });
 
 //CREATE - add new theme to DB
-router.post("/", isLoggedIn,function(req, res){
+router.post("/", middleware.isLoggedIn,function(req, res){
     // get data from form and add to themes array
     var name = req.body.name;
     var image = req.body.image;
@@ -40,7 +41,7 @@ router.post("/", isLoggedIn,function(req, res){
 });
 
 //NEW - show form to create new theme
-router.get("/new", isLoggedIn,function(req, res){
+router.get("/new", middleware.isLoggedIn,function(req, res){
    res.render("themes/new"); 
 });
 
@@ -59,7 +60,7 @@ router.get("/:id", function(req, res){
 })
 
 // EDIT THEMES ROUTE
-router.get("/:id/edit", checkThemeOwnership,function(req, res) {
+router.get("/:id/edit", middleware.checkThemeOwnership,function(req, res) {
     // is user logged in??
     
         Theme.findById(req.params.id, function(err, foundTheme) {
@@ -69,7 +70,7 @@ router.get("/:id/edit", checkThemeOwnership,function(req, res) {
 })
 
 // UPDATE THEMES ROUTE
-router.put("/:id", checkThemeOwnership,function(req, res) {
+router.put("/:id", middleware.checkThemeOwnership,function(req, res) {
     // Find and Update the correct theme
     Theme.findByIdAndUpdate(req.params.id, req.body.theme, function(err, updatedTheme) {
         if (err) {
@@ -81,7 +82,7 @@ router.put("/:id", checkThemeOwnership,function(req, res) {
 })
 
 // Delete and Destroy Theme
-router.delete("/:id", checkThemeOwnership,function(req, res) {
+router.delete("/:id", middleware.checkThemeOwnership,function(req, res) {
     Theme.findByIdAndRemove(req.params.id, function(err) {
         if (err) {
             res.redirect("/themes")
@@ -90,35 +91,5 @@ router.delete("/:id", checkThemeOwnership,function(req, res) {
         }
     })
 })
-
-// middleware
-
-function checkThemeOwnership(req, res, next) {
-    if (req.isAuthenticated()) {
-        Theme.findById(req.params.id, function(err, foundTheme) {
-            if (err) {
-                res.redirect("back")
-            } else {
-                // does the user owns theme?
-                if (foundTheme.author.id.equals(req.user._id)) {
-                    next()
-                } else {
-                    res.redirect("back")
-                }
-                
-            }
-        })
-    } else {
-        res.redirect("back")
-    }
-}
-
-// Checking condition if user logged in
-function isLoggedIn(req, res, next){
-    if(req.isAuthenticated()){
-        return next();
-    }
-    res.redirect("/login");
-}
 
 module.exports = router
