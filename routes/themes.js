@@ -58,6 +58,29 @@ router.get("/:id", function(req, res){
     });
 })
 
+// EDIT THEMES ROUTE
+router.get("/:id/edit", function(req, res) {
+    Theme.findById(req.params.id, function(err, foundTheme) {
+        if (err) {
+            res.redirect("/themes")
+        } else {
+            res.render("themes/edit", {theme: foundTheme})
+        }
+    })
+})
+
+// UPDATE THEMES ROUTE
+router.put("/:id", function(req, res) {
+    // Find and Update the correct theme
+    Theme.findByIdAndUpdate(req.params.id, req.body.theme, function(err, updatedTheme) {
+        if (err) {
+            res.redirect("/themes")
+        } else {
+            res.redirect("/themes/" + req.params.id)
+        }
+    })
+})
+
 // Checking condition if user logged in
 function isLoggedIn(req, res, next){
     if(req.isAuthenticated()){
