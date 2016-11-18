@@ -48,6 +48,29 @@ router.post("/", isLoggedIn,function(req, res){
    //redirect theme show page
 });
 
+// Comment Edit Route
+router.get("/:comment_id/edit", function(req, res) {
+    Comment.findById(req.params.comment_id, function(err, foundComment) {
+        if (err) {
+            res.redirect("back")
+        } else {
+            res.render("comments/edit", {theme_id: req.params.id, comment: foundComment})
+        }
+    })
+    
+})
+
+// Comment Update
+router.put("/:comment_id", function(req, res) {
+    Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, function(err, updatedComment) {
+        if (err) {
+            res.redirect("back")
+        } else {
+            res.redirect("/themes/" + req.params.id)
+        }
+    })
+})
+
 // Checking condition if user logged in
 function isLoggedIn(req, res, next){
     if(req.isAuthenticated()){
