@@ -71,6 +71,18 @@ router.put("/:comment_id", function(req, res) {
     })
 })
 
+// Comment Destroy Route
+router.delete("/:comment_id", function(req, res) {
+    // Find by id and remove
+    Comment.findByIdAndRemove(req.params.comment_id, function(err) {
+        if (err) {
+            res.redirect("back")
+        } else {
+            res.redirect("/themes/" + req.params.id)
+        }
+    })
+})
+
 // Checking condition if user logged in
 function isLoggedIn(req, res, next){
     if(req.isAuthenticated()){
