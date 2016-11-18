@@ -16,13 +16,17 @@ router.get("/", function(req, res){
 });
 
 //CREATE - add new theme to DB
-router.post("/", function(req, res){
+router.post("/", isLoggedIn,function(req, res){
     // get data from form and add to themes array
     var name = req.body.name;
     var image = req.body.image;
     var timeFrame = req.body.timeFrame;
     var desc = req.body.description;
-    var newTheme = {name: name, image: image, description: desc, timeFrame: timeFrame}
+    var author = {
+        id: req.user._id,
+        username: req.user.username
+    }
+    var newTheme = {name: name, image: image, description: desc, timeFrame: timeFrame, author: author}
     
     // Create a new theme and save to DB
     Theme.create(newTheme, function(err, newlyCreated){
@@ -36,7 +40,7 @@ router.post("/", function(req, res){
 });
 
 //NEW - show form to create new theme
-router.get("/new", function(req, res){
+router.get("/new", isLoggedIn,function(req, res){
    res.render("themes/new"); 
 });
 
@@ -53,5 +57,13 @@ router.get("/:id", function(req, res){
         }
     });
 })
+
+// Checking condition if user logged in
+function isLoggedIn(req, res, next){
+    if(req.isAuthenticated()){
+        return next();
+    }
+    res.redirect("/login");
+}
 
 module.exports = router
