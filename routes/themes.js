@@ -81,6 +81,17 @@ router.put("/:id", function(req, res) {
     })
 })
 
+// Delete and Destroy Theme
+router.delete("/:id", function(req, res) {
+    Theme.findByIdAndRemove(req.params.id, function(err) {
+        if (err) {
+            res.redirect("/themes")
+        } else {
+           res.redirect("/themes")
+        }
+    })
+})
+
 // Checking condition if user logged in
 function isLoggedIn(req, res, next){
     if(req.isAuthenticated()){
