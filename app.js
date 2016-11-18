@@ -1,6 +1,7 @@
 var express         = require("express"),
     app             = express(),
     bodyParser      = require("body-parser"),
+    flash           = require("connect-flash"),
     mongoose        = require("mongoose"),
     passport        = require("passport"),
     LocalStrategy   = require("passport-local"),
@@ -16,6 +17,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"))
 app.use(methodOverride("_method"))
+app.use(flash())
 //console.log(__dirname)
 // Database Seed
 // seedDB();
@@ -36,6 +38,8 @@ passport.deserializeUser(User.deserializeUser())
 // the below function is used for sending user data to all templates
 app.use(function(req, res, next){
    res.locals.currentUser = req.user;
+   res.locals.error = req.flash("error")
+   res.locals.success = req.flash("success")
    next();
 });
 
