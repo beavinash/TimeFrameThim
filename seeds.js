@@ -25,34 +25,34 @@ var data = [
 
 function seedDB() {
     Theme.remove({}, function(err) {
-        if (err) {
-            console.log(err)
-        }
-    console.log("Removed Campgrounds!")
-    //add a few campgrounds
-        data.forEach(function(seed){
-            Theme.create(seed, function(err, theme){
-                if(err){
-                    console.log(err)
-                } else {
-                    console.log("added a theme");
-                    //create a comment
-                    Comment.create(
-                        {
-                            text: "This place is great, but I wish there was internet",
-                            author: "Homer"
-                        }, function(err, comment){
-                            if(err){
-                                console.log(err);
-                            } else {
-                                theme.comments.push(comment);
-                                theme.save();
-                                console.log("Created new comment");
-                            }
-                        });
-                }
-            });
-        });
+    //     if (err) {
+    //         console.log(err)
+    //     }
+    // console.log("Removed Campgrounds!")
+    // //add a few campgrounds
+    //     data.forEach(function(seed){
+    //         Theme.create(seed, function(err, theme){
+    //             if(err){
+    //                 console.log(err)
+    //             } else {
+    //                 console.log("added a theme");
+    //                 //create a comment
+    //                 Comment.create(
+    //                     {
+    //                         text: "This place is great, but I wish there was internet",
+    //                         author: "Homer"
+    //                     }, function(err, comment){
+    //                         if(err){
+    //                             console.log(err);
+    //                         } else {
+    //                             theme.comments.push(comment);
+    //                             theme.save();
+    //                             console.log("Created new comment");
+    //                         }
+    //                     });
+    //             }
+    //         });
+    //     });
     })
 }
 
