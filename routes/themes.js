@@ -59,14 +59,13 @@ router.get("/:id", function(req, res){
 })
 
 // EDIT THEMES ROUTE
-router.get("/:id/edit", function(req, res) {
-    Theme.findById(req.params.id, function(err, foundTheme) {
-        if (err) {
-            res.redirect("/themes")
-        } else {
+router.get("/:id/edit", checkThemeOwnership,function(req, res) {
+    // is user logged in??
+    
+        Theme.findById(req.params.id, function(err, foundTheme) {
+            
             res.render("themes/edit", {theme: foundTheme})
-        }
-    })
+        })
 })
 
 // UPDATE THEMES ROUTE
@@ -91,6 +90,28 @@ router.delete("/:id", function(req, res) {
         }
     })
 })
+
+// middleware
+
+function checkThemeOwnership(req, res, next) {
+    if (req.isAuthenticated()) {
+        Theme.findById(req.params.id, function(err, foundTheme) {
+            if (err) {
+                res.redirect("back")
+            } else {
+                // does the user owns theme?
+                if (foundTheme.author.id.equals(req.user._id)) {
+                    next()
+                } else {
+                    res.redirect("back")
+                }
+                
+            }
+        })
+    } else {
+        res.redirect("back")
+    }
+}
 
 // Checking condition if user logged in
 function isLoggedIn(req, res, next){
