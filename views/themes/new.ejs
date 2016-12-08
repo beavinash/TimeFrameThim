@@ -1,7 +1,7 @@
 <% include ../partials/header %>
 <div class="container">
     <div class="row">
-        <h1 style="text-align: center">Create a New Theme</h1>
+        <h1 style="text-align: center; color: #ff6600; text-decoration: underline;">Create a New Theme</h1>
         <div style="width: 30%; margin: 25px auto;">
             <form action="/themes" method="POST">
                 <div class="form-group">
@@ -11,7 +11,7 @@
                     <input class="form-control" type="text" name="image" placeholder="image url">
                 </div>
                 <div class="form-group">
-                    <input class="form-control" type="text" name="timeFrame" placeholder="time frame">
+                    <input class="form-control" type="text" name="timeFrame" placeholder="time frame"> Format: 02:00pm to 02:30pm</input>
                 </div>
                 <div class="form-group">
                     <input class="form-control" type="text" name="description" placeholder="description">
