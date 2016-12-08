@@ -12,10 +12,11 @@ var express         = require("express"),
     seedDB          = require("./seeds")
     
 
-// mongoose.connect("mongodb://localhost/eine_practice");
+// Development connection
+mongoose.connect(process.env.DATABASEURL);
 
 // Production connection
-mongoose.connect("mongodb://avinash:elonMusk22@ds127878.mlab.com:27878/eine");
+// mongoose.connect("mongodb://avinash:elonMusk22@ds127878.mlab.com:27878/eine");
 // mongodb://avinash:elonMusk22@ds127878.mlab.com:27878/eine
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
