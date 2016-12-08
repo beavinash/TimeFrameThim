@@ -12,8 +12,11 @@ var express         = require("express"),
     seedDB          = require("./seeds")
     
 
-// Development connection
-mongoose.connect(process.env.DATABASEURL);
+// Development connection or Production connection
+
+var url = process.env.DATABASEURL || "mongodb://localhost/eine_practice"
+
+mongoose.connect(url);
 
 // Production connection
 // mongoose.connect("mongodb://avinash:elonMusk22@ds127878.mlab.com:27878/eine");
