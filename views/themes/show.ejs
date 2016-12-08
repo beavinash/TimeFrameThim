@@ -17,6 +17,7 @@
                     <p><%= theme.description %></p>
                     <p>
                         <strong><em>By <%= theme.author.username %></em></strong>
+                        <p><%= theme.createdAt.toDateString() %></p>
                     </p>
                     
                     <% if(currentUser && theme.author.id.equals(currentUser._id)) {%>
@@ -38,7 +39,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <strong><%= comment.author.username %></strong>
-                        <span class="pull-right">30 mins ago</span>
+                        <span class="pull-right"><%= comment.createdAt %></span>
                     <p>
                          <%= comment.text %>
                     </p>

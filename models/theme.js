@@ -6,6 +6,7 @@ var themeSchema = new mongoose.Schema({
        image: String,
        description: String,
        timeFrame: String,
+       createdAt: {type: Date, default: Date.now},
        author: {
               id: {
                      type: mongoose.Schema.Types.ObjectId,
